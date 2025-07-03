@@ -1,20 +1,37 @@
+import { Button } from "@/components/ui/button";
 import { useGetBooksQuery } from "@/redux/api/baseApi";
+import { NavLink } from "react-router";
+import Loader from "../commonComponent/Loader";
+import { Banner } from "./Banner";
 import { BookCard } from "./BookCard";
 
 const BooksSection = () => {
   const { data, isLoading, isError } = useGetBooksQuery(undefined);
-  const books = data?.data;
+  const books = data?.data?.slice(0, 8);
   console.log(books);
 
   if (isLoading) {
-    return <p>Books is Loading..</p>;
+    return <Loader></Loader>;
   }
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-      {books?.map((book) => (
-        <BookCard book={book} key={book?._id}></BookCard>
-      ))}
-    </div>
+    <section>
+      <Banner></Banner>
+
+      <div>
+        <h2 className="w-full mx-auto my-4 text-center font-semibold text-3xl">
+          Popular Books
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+        {books?.map((book) => (
+          <BookCard book={book} key={book?._id}></BookCard>
+        ))}
+      </div>
+      <NavLink className="mt-5 flex justify-center items-center" to="/books">
+        <Button className="mx-auto ">See All</Button>
+      </NavLink>
+    </section>
   );
 };
 

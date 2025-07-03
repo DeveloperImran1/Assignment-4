@@ -4,8 +4,8 @@ import AllBooks from "@/pages/allBooks/AllBooks";
 import BookDetails from "@/pages/bookDetails/BookDetails";
 import BorrowDetails from "@/pages/borrowDetails/BorrowDetails";
 import BorrowSummary from "@/pages/borrowSummary/BorrowSummary";
-import CreateBook from "@/pages/createBook/CreateBook";
-import EditBook from "@/pages/editBook/EditBook";
+import { CreateBook } from "@/pages/createBook/CreateBook";
+import { EditBook } from "@/pages/editBook/EditBook";
 import { createBrowserRouter } from "react-router";
 
 const routes = createBrowserRouter([

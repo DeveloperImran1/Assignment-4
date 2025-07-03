@@ -28,13 +28,13 @@ const Navbar = () => {
         </Link>
         <Link
           className="text-sm font-medium bg-[#3e6ae0] hover:bg-[#0cc1e0]  text-white px-3 py-2 rounded-md transition-all transition-3000"
-          to="/books"
+          to="/create-book"
         >
           Add Book
         </Link>
         <Link
           className="text-sm font-medium bg-[#3e6ae0] hover:bg-[#0cc1e0]  text-white px-3 py-2 rounded-md transition-all transition-3000"
-          to="/books"
+          to="/borrow-summary"
         >
           Borrow Summary
         </Link>

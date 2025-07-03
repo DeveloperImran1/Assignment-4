@@ -7,10 +7,47 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Edit2, ShoppingBag, Trash2 } from "lucide-react";
+import { BorrowModal } from "@/pages/allBooks/components/BorrowModal";
+import { useDeleteBookMutation } from "@/redux/api/baseApi";
+import { Edit2, Trash2, View } from "lucide-react";
 import { Link } from "react-router";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 export function BookCard({ book }) {
+  // handle book delete
+  const [deleteBook] = useDeleteBookMutation();
+
+  const handleDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteBook(book?._id);
+          console.log("Handle delete er res is ", res);
+
+          if (res?.data?.success) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your book has been deleted.",
+              icon: "success",
+            });
+          }
+        } catch (error) {
+          console.log("delete er error is", error);
+          toast.error(error?.message);
+        }
+      }
+    });
+  };
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -53,19 +90,23 @@ export function BookCard({ book }) {
         </CardDescription>
       </CardHeader>
       <CardFooter className="flex gap-2 justify-between ">
-        <Button type="submit" className="">
+        <Button onClick={handleDelete} type="submit" className="">
           <Trash2></Trash2>{" "}
         </Button>
-        <Link to={`/books/3434`}>
+        <Link to={`/edit-book/${book?._id}`}>
           <Button type="submit" className="">
             <Edit2></Edit2>{" "}
           </Button>
         </Link>
-        <Link to={`/books/3434`}>
+        <Link to={`/books/${book?._id}`}>
           <Button type="submit" className="">
-            <ShoppingBag />{" "}
+            <View />{" "}
           </Button>
         </Link>
+
+        <Button type="submit" className="">
+          <BorrowModal bookId={book?._id} isHome={true}></BorrowModal>
+        </Button>
       </CardFooter>
     </Card>
   );

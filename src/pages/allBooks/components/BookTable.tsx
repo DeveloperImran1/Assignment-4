@@ -34,71 +34,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useDeleteBookMutation, useGetBooksQuery } from "@/redux/api/baseApi";
+import type { TBook } from "@/types";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-
-// const data: Payment[] = [
-//   {
-//     id: "m5gr84i9",
-//     amount: 316,
-//     status: "success",
-//     email: "ken99@example.com",
-//   },
-//   {
-//     id: "3u1reuv4",
-//     amount: 242,
-//     status: "success",
-//     email: "Abe45@example.com",
-//   },
-//   {
-//     id: "derv1ws0",
-//     amount: 837,
-//     status: "processing",
-//     email: "Monserrat44@example.com",
-//   },
-//   {
-//     id: "5kma53ae",
-//     amount: 874,
-//     status: "success",
-//     email: "Silas22@example.com",
-//   },
-//   {
-//     id: "bhqecj4p",
-//     amount: 721,
-//     status: "failed",
-//     email: "carmella@example.com",
-//   },
-// ];
-
-// export type Payment = {
-//   id: string;
-//   amount: number;
-//   status: "pending" | "processing" | "success" | "failed";
-//   email: string;
-// };
-
-export type Payment = {
-  _id: string;
-  title: string;
-  author: string;
-  genre:
-    | "FICTION"
-    | "NON_FICTION"
-    | "SCIENCE"
-    | "HISTORY"
-    | "BIOGRAPHY"
-    | "FANTASY";
-  isbn: string;
-  description: string;
-  copies: number;
-  available: boolean;
-};
+import { BorrowModal } from "./BorrowModal";
 
 export function DataTableDemo() {
-  const { data: bookData, isLoading, isError } = useGetBooksQuery(undefined);
+  const { data: bookData, isLoading } = useGetBooksQuery(undefined);
   const data = bookData?.data;
 
+  console.log("data is", data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -108,7 +54,7 @@ export function DataTableDemo() {
   const [rowSelection, setRowSelection] = React.useState({});
 
   // handle book delete
-  const [deleteBook, {}] = useDeleteBookMutation();
+  const [deleteBook] = useDeleteBookMutation();
 
   const handleDelete = (bookId) => {
     Swal.fire({
@@ -140,7 +86,7 @@ export function DataTableDemo() {
     });
   };
 
-  const columns: ColumnDef<Payment>[] = [
+  const columns: ColumnDef<TBook>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -228,9 +174,9 @@ export function DataTableDemo() {
               <DropdownMenuItem>
                 <Link to={`/edit-book/${currentBook?._id}`}>Edit Book</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to={`/borrow/${currentBook?._id}`}>Borrow Book</Link>
-              </DropdownMenuItem>
+              <BorrowModal bookId={currentBook?._id} isHome={false}>
+                {/* <DropdownMenuItem></DropdownMenuItem> */}
+              </BorrowModal>
               <DropdownMenuItem onClick={() => handleDelete(currentBook?._id)}>
                 Delete Book
               </DropdownMenuItem>
@@ -365,7 +311,7 @@ export function DataTableDemo() {
             variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
-            // disabled={!table.getCanPreviousPage()}
+            disabled={!table.getCanPreviousPage()}
           >
             Previous
           </Button>
@@ -373,7 +319,7 @@ export function DataTableDemo() {
             variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
-            // disabled={!table.getCanNextPage()}
+            disabled={!table.getCanNextPage()}
           >
             Next
           </Button>
