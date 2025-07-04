@@ -4,7 +4,7 @@ const serverApi = import.meta.env.VITE_SERVER_API_URL;
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://level2-assignment-2-cyan.vercel.app",
+    baseUrl: "https://level2-assignment-2-cyan.vercel.app/api",
   }),
   tagTypes: ["books", "borrow"],
   endpoints: (builder) => ({
