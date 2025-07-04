@@ -9,12 +9,16 @@ import {
 } from "@/components/ui/card";
 import { BorrowModal } from "@/pages/allBooks/components/BorrowModal";
 import { useDeleteBookMutation } from "@/redux/api/baseApi";
+import type { TBook } from "@/types";
 import { Edit2, Trash2, View } from "lucide-react";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
-export function BookCard({ book }) {
+interface IBookCardProps {
+  book: TBook;
+}
+export function BookCard({ book }: IBookCardProps) {
   // handle book delete
   const [deleteBook] = useDeleteBookMutation();
 
@@ -42,7 +46,7 @@ export function BookCard({ book }) {
           }
         } catch (error) {
           console.log("delete er error is", error);
-          toast.error(error?.message);
+          toast.error((error as Error)?.message || "Something went wrong");
         }
       }
     });
@@ -85,7 +89,7 @@ export function BookCard({ book }) {
                 : `This Book is Not Available`}{" "}
             </p>
 
-            <p className="mt-5">{book?.description}</p>
+            <p className="mt-5">{book?.description?.slice(0, 30)} ...</p>
           </div>
         </CardDescription>
       </CardHeader>

@@ -28,14 +28,20 @@ import { cn } from "@/lib/utils";
 import { useCreateBorrowMutation } from "@/redux/api/baseApi";
 import { formatDate } from "date-fns";
 import { CalendarIcon, ShoppingBag } from "lucide-react";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-export function BorrowModal({ bookId, isHome }) {
+type TBorrorModal = {
+  bookId: string;
+  isHome: boolean;
+};
+type TBorrorwFormData = {
+  quantity: string;
+  dueDate: string;
+};
+export function BorrowModal({ bookId, isHome }: TBorrorModal) {
   const navigate = useNavigate();
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
 
   const [createBorrow] = useCreateBorrowMutation();
   const form = useForm({
@@ -45,7 +51,7 @@ export function BorrowModal({ bookId, isHome }) {
     },
   });
 
-  async function onSubmit(data) {
+  async function onSubmit(data: TBorrorwFormData) {
     const borrowData = { ...data, book: bookId };
     try {
       const res = await createBorrow(borrowData);
@@ -53,7 +59,12 @@ export function BorrowModal({ bookId, isHome }) {
         toast.success(res?.data?.message);
         navigate("/borrow-summary");
       } else {
-        toast.error(res?.error?.data?.message);
+        toast.error(
+          (res?.error &&
+            "data" in res.error &&
+            (res.error as { data?: { message?: string } }).data?.message) ||
+            "An error occurred"
+        );
       }
     } catch (error) {
       console.log("Borrow error is", error);

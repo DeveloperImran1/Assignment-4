@@ -16,35 +16,59 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCreateBookMutation } from "@/redux/api/baseApi";
+import type { TCreateBookForm } from "@/types";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
+type RTKQueryError = {
+  data?: {
+    message?: string;
+  };
+};
 export function CreateBook() {
   const [createBook] = useCreateBookMutation();
   const navigate = useNavigate();
 
+  const GENRES = [
+    "FICTION",
+    "NON_FICTION",
+    "SCIENCE",
+    "HISTORY",
+    "BIOGRAPHY",
+    "FANTASY",
+  ] as const;
   const form = useForm({
     defaultValues: {
       title: "",
       author: "",
-      genre: "",
+      genre: "FICTION",
       isbn: "",
       description: "",
-      copies: "",
+      copies: 0,
       available: true,
     },
   });
 
-  async function onSubmit(data) {
+  async function onSubmit(data: TCreateBookForm) {
+    const submitData = { ...data, copies: Number(data.copies) };
+    console.log("book create er data is ", submitData);
     try {
-      const res = await createBook(data);
+      const res = await createBook(submitData);
 
-      if (res?.data?.success) {
+      if ("data" in res && res?.data?.success) {
         toast.success(`${res?.data?.message},  😍`);
         navigate("/books");
+      } else if (
+        "error" in res &&
+        res?.error &&
+        typeof res.error === "object" &&
+        "data" in res.error
+      ) {
+        const error = res.error as RTKQueryError;
+        toast.error(`${error.data?.message ?? "An error occurred"} 😒`);
       } else {
-        toast.error(`${res?.error?.data?.message} 😒`);
+        toast.error("An error occurred 😒");
       }
     } catch (error) {
       console.log("error is in catch ", error);
@@ -104,12 +128,9 @@ export function CreateBook() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="FICTION">FICTION</SelectItem>
-                    <SelectItem value="NON_FICTION">NON_FICTION</SelectItem>
-                    <SelectItem value="SCIENCE">SCIENCE</SelectItem>
-                    <SelectItem value="HISTORY">HISTORY</SelectItem>
-                    <SelectItem value="BIOGRAPHY">BIOGRAPHY</SelectItem>
-                    <SelectItem value="FANTASY">FANTASY</SelectItem>
+                    {GENRES?.map((genre) => (
+                      <SelectItem value={genre}>{genre}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormItem>

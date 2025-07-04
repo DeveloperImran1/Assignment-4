@@ -14,11 +14,14 @@ const Navbar = () => {
 
   return (
     <nav className="flex justify-between items-center">
-      <img
-        className="h-28 w-28"
-        src="https://i.postimg.cc/J0pJ6NS5/ffb5bbf3-70ae-466f-8b59-d76cb5406695-removebg-preview.png"
-        alt="logo"
-      />
+      <Link to="/">
+        {" "}
+        <img
+          className="h-28 w-28"
+          src="https://i.postimg.cc/J0pJ6NS5/ffb5bbf3-70ae-466f-8b59-d76cb5406695-removebg-preview.png"
+          alt="logo"
+        />
+      </Link>
       <div className="flex gap-3">
         <Link
           className="text-sm font-medium bg-[#3e6ae0] hover:bg-[#0cc1e0]  text-white px-3 py-2 rounded-md transition-all transition-3000"

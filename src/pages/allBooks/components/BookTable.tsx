@@ -56,7 +56,7 @@ export function DataTableDemo() {
   // handle book delete
   const [deleteBook] = useDeleteBookMutation();
 
-  const handleDelete = (bookId) => {
+  const handleDelete = (bookId: string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -80,7 +80,7 @@ export function DataTableDemo() {
           }
         } catch (error) {
           console.log("delete er error is", error);
-          toast.error(error?.message);
+          toast.error((error as Error)?.message || "Something went wrong");
         }
       }
     });

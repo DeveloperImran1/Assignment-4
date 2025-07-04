@@ -8,21 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetBorrowsQuery } from "@/redux/api/baseApi";
-
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-];
+import type { TBorrowBook } from "@/types";
 
 function BorrowSummary() {
   const { data, isLoading } = useGetBorrowsQuery(undefined, {
@@ -54,7 +40,7 @@ function BorrowSummary() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {borrowBooks.map((borrow, index) => (
+          {borrowBooks.map((borrow: TBorrowBook, index: number) => (
             <TableRow key={borrow?.book?.[0]?.isbn}>
               <TableCell>{index + 1}</TableCell>
               <TableCell className="font-medium">

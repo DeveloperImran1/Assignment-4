@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { useGetBooksQuery } from "@/redux/api/baseApi";
+import type { TBook } from "@/types";
 import { NavLink } from "react-router";
 import Loader from "../commonComponent/Loader";
 import { Banner } from "./Banner";
 import { BookCard } from "./BookCard";
 
 const BooksSection = () => {
-  const { data, isLoading, isError } = useGetBooksQuery(undefined);
-  const books = data?.data?.slice(0, 8);
-  console.log(books);
+  const { data, isLoading } = useGetBooksQuery(undefined);
+  const books: TBook[] = data?.data?.slice(0, 8);
 
   if (isLoading) {
     return <Loader></Loader>;

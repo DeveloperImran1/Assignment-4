@@ -20,6 +20,7 @@ import {
   useGetSingleBookQuery,
   useUpdateBookMutation,
 } from "@/redux/api/baseApi";
+import type { TCreateBookForm } from "@/types";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
@@ -39,7 +40,7 @@ export function EditBook() {
       genre: "",
       isbn: "",
       description: "",
-      copies: "",
+      copies: 0,
       available: true,
     },
   });
@@ -52,15 +53,16 @@ export function EditBook() {
         genre: book?.genre || "",
         isbn: book?.isbn || "",
         description: book?.description || "",
-        copies: book?.copies || "",
-        available: book?.available || "",
+        copies: book?.copies || 0,
+        available: book?.available || true,
       });
     }
   }, [book, form]);
 
-  async function onSubmit(data) {
+  async function onSubmit(data: TCreateBookForm) {
+    const updatedData = { ...data, copies: Number(data?.copies) };
     try {
-      const res = await updateBook({ bookId: id, updatedData: data });
+      const res = await updateBook({ bookId: id, updatedData: updatedData });
 
       console.log("updated res is ", res);
       if (res?.data?.success) {
