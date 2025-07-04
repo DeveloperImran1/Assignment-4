@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// const serverApi = import.meta.env.VITE_SERVER_API_URL;
+const serverApi = import.meta.env.VITE_SERVER_API_URL;
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://level2-assignment-2-cyan.vercel.app/api",
+    baseUrl: serverApi,
   }),
   tagTypes: ["books", "borrow"],
   endpoints: (builder) => ({
@@ -49,7 +49,7 @@ export const baseApi = createApi({
         method: "POST",
         body: borrowData,
       }),
-      invalidatesTags: ["borrow"],
+      invalidatesTags: ["borrow", "books"],
     }),
   }),
 });

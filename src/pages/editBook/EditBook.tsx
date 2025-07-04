@@ -219,7 +219,7 @@ export function EditBook() {
             )}
           />
 
-          <Button type="submit">Added</Button>
+          <Button type="submit">Update</Button>
         </form>
       </Form>
     </section>
